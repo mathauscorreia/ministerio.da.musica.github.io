@@ -1,0 +1,234 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #fff;
+    position: relative;
+}
+
+header {
+    background-color: rgba(34, 34, 51, 0.9);
+    color: #ffcc00;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    overflow: auto;
+    position: relative;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.month {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.25);
+    text-align: center;
+    position: relative;
+    padding: 10px;
+}
+
+.month h3 {
+    margin: 0;
+    padding: 5px;
+    background-color: #ffcc00;
+    color: #333;
+    border-radius: 5px 5px 0 0;
+}
+
+.day-names {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    padding: 5px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.day:hover {
+    background-color: #f1e5ac;
+}
+
+.day.filled {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.empty-day {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+}
+
+.culto {
+    background-color: yellow;
+}
+
+.evento {
+    background-color: rgb(0, 128, 255);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffcc00;
+    color: #333;
+    cursor: pointer;
+}
+
+.form-group button:hover {
+    background-color: #e6b800;
+}
+
+.delete-btn {
+    margin-left: 10px;
+    background-color: #dc3545;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.export-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    border: none;
+}
+
+.export-button:hover {
+    background-color: #218838;
+}
+
+.notes-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.note {
+    position: absolute;
+    font-size: 48px;
+    color: rgba(0, 0, 0, 1);
+    transform: rotate(0deg);
+    font-family: 'Arial', sans-serif;
+}
+
+.event-text {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.performer-text {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.filled {
+    background-color: #28a745;
+    color: white;
+}
+
+button {
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+}
