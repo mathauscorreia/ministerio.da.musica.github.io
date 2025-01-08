@@ -1,9 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://ujgpoucwkivujqmhgsfr.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqZ3BvdWN3a2l2dWpxbWhnc2ZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgxNjc0MzEsImV4cCI6MjA0Mzc0MzQzMX0.bqOMCl05ZpyLZQ0vIeNyylT3bAugW-Z5EGiZHIsJxg8';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 const months = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
