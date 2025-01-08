@@ -1,5 +1,5 @@
 const months = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 const events = {};
@@ -9,9 +9,11 @@ let currentDate;
 function generateCalendar() {
     const grid = document.getElementById('month-grid');
     grid.innerHTML = '';
+
     months.forEach((month, index) => {
         const monthDiv = document.createElement('div');
         monthDiv.className = 'month';
+
         const title = document.createElement('h3');
         title.innerText = month;
         monthDiv.appendChild(title);
@@ -24,6 +26,7 @@ function generateCalendar() {
 
         const dayNamesDiv = document.createElement('div');
         dayNamesDiv.className = 'day-names';
+
         ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].forEach(day => {
             const dayName = document.createElement('div');
             dayName.innerText = day;
@@ -48,13 +51,7 @@ function generateCalendar() {
 
             const key = `${index}-${day}`;
             if (events[key]) {
-                if (events[key].type === "musica") {
-                    dayDiv.classList.add('musica');
-                } else if (events[key].type === "regencia") {
-                    dayDiv.classList.add('regencia');
-                } else if (events[key].type === "evento") {
-                    dayDiv.classList.add('evento');
-                }
+                dayDiv.classList.add(events[key].type);
             }
 
             dayDiv.innerText = day;
@@ -127,15 +124,17 @@ function saveEvent() {
 
     const eventType = eventTypeInput.value;
     const key = `${currentMonth}-${currentDate}`;
+
+    if (!events[key]) {
+        events[key] = { performers: [], type: eventType };
+    }
+
+    events[key].type = eventType;
+
     if (currentEventIndex !== null) {
         events[key].performers[currentEventIndex] = performer;
         currentEventIndex = null;
     } else {
-        if (!events[key]) {
-            events[key] = { performers: [], type: eventType };
-        } else {
-            events[key].type = eventType; // Atualiza o tipo se já houver um evento
-        }
         events[key].performers.push(performer);
     }
 
@@ -145,14 +144,14 @@ function saveEvent() {
 }
 
 function deleteEvent(index = null) {
-    if (index === null) return;
-
     const key = `${currentMonth}-${currentDate}`;
-    if (events[key]) {
+
+    if (index !== null && events[key]) {
         events[key].performers.splice(index, 1);
-        if (events[key].performers.length === 0) {
-            delete events[key];
-        }
+    }
+
+    if (events[key] && events[key].performers.length === 0) {
+        delete events[key];
     }
 
     closeModal();
@@ -171,19 +170,38 @@ function editEvent(index) {
 function exportMonthToPDF(monthIndex) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
     const title = `Eventos do mês de ${months[monthIndex]}`;
     doc.setFontSize(16);
     doc.text(title, 10, 10);
 
-    let y = 20;
-    for (let day = 1; day <= 31; day++) {
+    const tableColumn = ["Data", "Pessoas", "Tipo de Evento"];
+    const tableRows = [];
+    const daysInMonth = new Date(2025, monthIndex + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
         const key = `${monthIndex}-${day}`;
         if (events[key]) {
-            doc.text(`${day} de ${months[monthIndex]}: ${events[key].performers.join(', ')}`, 10, y);
-            y += 10;
+            events[key].performers.forEach(performer => {
+                const eventType = events[key].type || "Sem Tipo";
+                const rowData = [`${day}/${monthIndex + 1}/2025`, performer, eventType];
+                tableRows.push(rowData);
+            });
         }
     }
+
+    if (tableRows.length === 0) {
+        doc.text("Nenhum evento registrado para este mês.", 10, 30);
+    } else {
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [41, 128, 185] },
+        });
+    }
+
     doc.save(`${months[monthIndex]}-eventos.pdf`);
 }
 
