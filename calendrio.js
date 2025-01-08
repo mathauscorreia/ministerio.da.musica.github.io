@@ -48,8 +48,10 @@ function generateCalendar() {
 
             const key = `${index}-${day}`;
             if (events[key]) {
-                if (events[key].type === "culto") {
-                    dayDiv.classList.add('culto');
+                if (events[key].type === "musica") {
+                    dayDiv.classList.add('musica');
+                } else if (events[key].type === "regencia") {
+                    dayDiv.classList.add('regencia');
                 } else if (events[key].type === "evento") {
                     dayDiv.classList.add('evento');
                 }
@@ -172,6 +174,7 @@ function exportMonthToPDF(monthIndex) {
     const doc = new jsPDF();
     const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     const title = `Eventos do mês de ${months[monthIndex]}`;
+    doc.setFontSize(16);
     doc.text(title, 10, 10);
 
     let y = 20;
