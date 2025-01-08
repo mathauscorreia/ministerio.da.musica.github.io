@@ -68,7 +68,6 @@ function generateCalendar() {
     generateNotesBackground();
 }
 
-
 function generateNotesBackground() {
     const notesBackground = document.getElementById('notes-background');
     const notes = ['♪', '♫', '♬', '♩', '♭', '♯'];
