@@ -7,6 +7,11 @@ let currentMonth;
 let currentDate;
 let currentEventIndex = null;
 
+function closeModal() {
+    const modal = document.getElementById('eventModal');
+    modal.style.display = 'none'; // Esconde o modal
+}
+
 // Função para carregar os eventos do servidor
 async function loadEvents() {
     const response = await fetch('/api/events');
@@ -90,7 +95,6 @@ function generateCalendar() {
     generateNotesBackground(); // Função para adicionar fundo musical (opcional)
 }
 
-// Função para abrir o modal de eventos
 function openDateSelector(monthIndex, day) {
     currentMonth = monthIndex;
     currentDate = day;
@@ -100,12 +104,13 @@ function openDateSelector(monthIndex, day) {
     modal.style.display = 'block';
 
     const currentList = document.getElementById('current-performers-list');
-    currentList.innerHTML = '';
+    currentList.innerHTML = ''; // Limpa a lista
+
     const key = `${monthIndex}-${day}`;
     if (events[key]) {
         events[key].performers.forEach((performer, index) => {
             const listItem = document.createElement('li');
-            listItem.innerHTML = `${performer}
+            listItem.innerHTML = `${performer.name}
                 <button onclick="editEvent(${index})">Editar</button>
                 <button style="background-color: #dc3545;" onclick="deleteEvent(${index})">Excluir</button>`;
             currentList.appendChild(listItem);
@@ -131,10 +136,10 @@ async function saveEvent() {
     let eventId = null;
     if (currentEventIndex !== null) {
         eventId = events[key].performers[currentEventIndex].id;
-        events[key].performers[currentEventIndex] = performer;
+        events[key].performers[currentEventIndex] = { id: eventId, name: performer };
         currentEventIndex = null;
     } else {
-        events[key].performers.push(performer);
+        events[key].performers.push({ name: performer });
     }
 
     performerInput.value = '';
@@ -160,22 +165,25 @@ async function saveEvent() {
     }
 }
 
-// Função para excluir um evento
+// Função para excluir evento
 async function deleteEvent(index) {
     const key = `${currentMonth}-${currentDate}`;
-    if (index !== null && events[key]) {
-        events[key].performers.splice(index, 1);
-    }
+    const eventToDelete = events[key]?.performers[index];
+    if (!eventToDelete) return;
 
-    if (events[key] && events[key].performers.length === 0) {
+    // Excluir do array de eventos
+    events[key].performers.splice(index, 1);
+
+    // Se não houver mais artistas, deletar o evento do dia
+    if (events[key].performers.length === 0) {
         delete events[key];
     }
 
     closeModal();
-    generateCalendar();
+    generateCalendar(); // Atualiza o calendário
 
     // Excluir do backend
-    const eventId = events[key]?.performers[index].id;
+    const eventId = eventToDelete.id;
     if (eventId) {
         const response = await fetch(`/api/events/${eventId}`, { method: 'DELETE' });
         const { success } = await response.json();
@@ -185,12 +193,12 @@ async function deleteEvent(index) {
     }
 }
 
-// Função para editar um evento
+// Função para editar evento
 function editEvent(index) {
     const performerInput = document.getElementById('performer');
     const key = `${currentMonth}-${currentDate}`;
     const currentPerformer = events[key].performers[index];
-    performerInput.value = currentPerformer;
+    performerInput.value = currentPerformer.name;
     currentEventIndex = index;
     closeModal();
     openDateSelector(currentMonth, currentDate);
