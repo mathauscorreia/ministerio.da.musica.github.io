@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="calendrio.js"></script>
+    <title>Ministério da Música</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+</head>
+<body>
+    <header>
+        <h1>Ministério da Música - 2025</h1>
+    </header>
+    <div class="notes-background" id="notes-background"></div>
+    <div class="container">
+        <div class="month-grid" id="month-grid">
+        </div>
+    </div>
+
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div class="form-group">
+                <label for="event-type">Tipo de Evento:</label>
+                <label><input type="radio" name="event-type" value="culto"> Culto</label>
+                <label><input type="radio" name="event-type" value="regencia"> Regencia</label>
+                <label><input type="radio" name="event-type" value="evento"> Evento</label>
+            </div>
+            <div class="form-group">
+                <label for="performer">Adicionar Artista:</label>
+                <input type="text" id="performer" placeholder="Enter performer's name" autocorrect="off" spellcheck="false">
+            </div>
+            <div class="form-group">
+                <button onclick="saveEvent()">Salvar</button>
+                <button onclick="deleteEvent()" style="background-color: #dc3545;">Apagar</button>
+            </div>
+            <div id="eventDetails" style="margin-top: 10px;">
+                <strong>Artistas Atuais:</strong>
+                <ul id="current-performers-list"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
