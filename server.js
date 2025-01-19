@@ -2,8 +2,10 @@ const express = require('express');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());  // Necessário para ler os dados do corpo da requisição
 
 // Configuração do cliente Supabase
@@ -28,17 +30,23 @@ app.get('/api/events', async (req, res) => {
 app.post('/api/events', async (req, res) => {
   const { name, date, type } = req.body;
 
+  // Verifica se todos os dados foram enviados
   if (!name || !date || !type) {
     return res.status(400).json({ success: false, message: 'Faltam dados obrigatórios' });
   }
 
+  // Converte a data para o formato esperado (UTC com hora ajustada para 00:00)
   const eventDate = new Date(date);
-  eventDate.setHours(0, 0, 0, 0);
+  eventDate.setHours(0, 0, 0, 0); // Ajusta a hora para 00:00
 
   try {
     const { data, error } = await supabase
       .from('eventos')
-      .insert([{ artista: name, data: eventDate.toISOString(), tipo_evento: type }]);
+      .insert([{
+        artista: name,
+        data: eventDate.toISOString(), // Envia a data no formato ISO
+        tipo_evento: type,
+      }]);
 
     if (error) {
       console.error('Erro ao salvar evento:', error);
