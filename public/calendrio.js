@@ -242,6 +242,4 @@ function exportMonthToPDF(monthIndex) {
 
     doc.save(`${months[monthIndex]}-eventos.pdf`);
 }
-
-// Chama a função loadEvents() para carregar os eventos ao carregar a página
 window.onload = loadEvents;

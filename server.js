@@ -11,6 +11,9 @@ app.use(express.json());  // Necessário para ler os dados do corpo da requisiç
 // Configuração do cliente Supabase
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
+// Servir arquivos estáticos (index.html, CSS, JS) da pasta 'public'
+app.use(express.static(path.join(__dirname, 'public')));  // A pasta 'public' deve conter o index.html e os outros arquivos estáticos
+
 // Endpoint para listar todos os eventos
 app.get('/api/events', async (req, res) => {
   try {
@@ -35,9 +38,8 @@ app.post('/api/events', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Faltam dados obrigatórios' });
   }
 
-  // Converte a data para o formato esperado (UTC com hora ajustada para 00:00)
   const eventDate = new Date(date);
-  eventDate.setHours(0, 0, 0, 0); // Ajusta a hora para 00:00
+  eventDate.setHours(0, 0, 0, 0);
 
   try {
     const { data, error } = await supabase
@@ -112,5 +114,6 @@ app.delete('/api/events/:id', async (req, res) => {
   }
 });
 
+// Iniciar o servidor
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
