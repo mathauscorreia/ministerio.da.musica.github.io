@@ -39,22 +39,25 @@ async function loadEvents() {
 // Função para gerar o calendário
 function generateCalendar() {
     const grid = document.getElementById('month-grid');
-    grid.innerHTML = '';
+    grid.innerHTML = ''; // Limpa o grid antes de regenerar
 
     months.forEach((month, index) => {
         const monthDiv = document.createElement('div');
         monthDiv.className = 'month';
 
+        // Criação do título do mês
         const title = document.createElement('h3');
         title.innerText = month;
         monthDiv.appendChild(title);
 
+        // Botão para exportar a escala
         const exportButton = document.createElement('button');
         exportButton.className = 'export-button';
         exportButton.innerText = 'Baixar Escala';
         exportButton.onclick = () => exportMonthToPDF(index);
         monthDiv.appendChild(exportButton);
 
+        // Criação dos nomes dos dias da semana
         const dayNamesDiv = document.createElement('div');
         dayNamesDiv.className = 'day-names';
         ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].forEach(day => {
@@ -64,30 +67,34 @@ function generateCalendar() {
         });
         monthDiv.appendChild(dayNamesDiv);
 
+        // Criação dos dias do mês
         const daysDiv = document.createElement('div');
         daysDiv.className = 'days';
-        const firstDay = new Date(2025, index, 1).getDay();
 
+        // Primeiro dia do mês
+        const firstDay = new Date(2025, index, 1).getDay(); // Usa o primeiro dia do mês para ajustar o calendário
         for (let i = 0; i < firstDay; i++) {
             const emptyDiv = document.createElement('div');
             emptyDiv.className = 'day empty-day';
             daysDiv.appendChild(emptyDiv);
         }
 
-        const daysInMonth = new Date(2025, index + 1, 0).getDate();
+        // Adiciona os dias do mês
+        const daysInMonth = new Date(2025, index + 1, 0).getDate(); // Número de dias no mês
         for (let day = 1; day <= daysInMonth; day++) {
             const dayDiv = document.createElement('div');
             dayDiv.className = 'day';
 
             const key = `${index}-${day}`;
             if (events[key]) {
-                dayDiv.classList.add(events[key].type);
+                dayDiv.classList.add(events[key].type);  // Adiciona a classe com base no tipo de evento
             }
 
             dayDiv.innerText = day;
-            dayDiv.onclick = () => openDateSelector(index, day);
+            dayDiv.onclick = () => openDateSelector(index, day); // Quando clica em um dia, abre o modal
             daysDiv.appendChild(dayDiv);
         }
+
         monthDiv.appendChild(daysDiv);
         grid.appendChild(monthDiv);
     });
