@@ -89,6 +89,7 @@ function generateNotesBackground() {
         notesBackground.appendChild(note);
     });
 }
+
 let currentEventIndex = null;
 
 function openDateSelector(monthIndex, day) {
