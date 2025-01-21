@@ -240,6 +240,7 @@ function exportMonthToPDF(monthIndex) {
         });
     }
 
+    // Salvar o PDF
     doc.save(`${months[monthIndex]}-eventos.pdf`);
 }
 window.onload = loadEvents;
