@@ -251,3 +251,7 @@ function exportMonthToPDF(monthIndex) {
     doc.save(`${months[monthIndex]}-eventos.pdf`);
 }
 window.onload = loadEvents;
+
+
+
+
