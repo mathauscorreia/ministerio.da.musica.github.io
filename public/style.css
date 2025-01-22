@@ -13,6 +13,7 @@ header {
     padding: 10px;
     text-align: center;
     font-size: 24px;
+    font-family: 'Montserrat', sans-serif; /* Fonte personalizada para o cabeçalho */
 }
 
 .container {
@@ -123,7 +124,7 @@ header {
 }
 
 .close {
-    color: #aaa;
+    color: #fff; /* Mudando a cor para branco para melhor visibilidade */
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -131,9 +132,7 @@ header {
 }
 
 .close:hover, .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    color: #ffcc00; /* Mudando para o tom de amarelo */
 }
 
 .form-group {
