@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministério da Música</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #fff;
+    position: relative;
+}
+
+header {
+    background-color: rgba(34, 34, 51, 0.9);
+    color: #ffcc00;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Montserrat', sans-serif; /* Fonte personalizada para o cabeçalho */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    overflow: auto;
+    position: relative;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.month {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.25);
+    text-align: center;
+    position: relative;
+    padding: 10px;
+}
+
+.month h3 {
+    margin: 0;
+    padding: 5px;
+    background-color: #ffcc00;
+    color: #333;
+    border-radius: 5px 5px 0 0;
+}
+
+.day-names {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    padding: 5px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.day:hover {
+    background-color: #f1e5ac;
+}
+
+.day.filled {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.empty-day {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+}
+
+.culto {
+    background-color: yellow;
+}
+
+.regencia {
+    background-color: yellow;
+}
+
+.evento {
+    background-color: rgb(0, 128, 255);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.close {
+    color: #fff; /* Mudando a cor para branco para melhor visibilidade */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover, .close:focus {
+    color: #ffcc00; /* Mudando para o tom de amarelo */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffcc00;
+    color: #333;
+    cursor: pointer;
+}
+
+.form-group button:hover {
+    background-color: #e6b800;
+}
+
+.delete-btn {
+    margin-left: 10px;
+    background-color: #dc3545;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.export-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    border: none;
+}
+
+.export-button:hover {
+    background-color: #218838;
+}
+
+.notes-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.note {
+    position: absolute;
+    font-size: 48px;
+    color: rgba(0, 0, 0, 1);
+    transform: rotate(0deg);
+    font-family: 'Arial', sans-serif;
+}
+
+.event-text {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.performer-text {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.filled {
+    background-color: #28a745;
+    color: white;
+}
+
+button {
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+}
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Ministério da Música - 2025</h1>
+    </header>
+    <div class="notes-background" id="notes-background"></div>
+    <div class="container">
+        <div class="month-grid" id="month-grid">
+        </div>
+    </div>
+
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div class="form-group">
+                <label for="event-type">Tipo de Evento:</label>
+                <label><input type="radio" name="event-type" value="culto"> Culto</label>
+                <label><input type="radio" name="event-type" value="regencia"> Regencia</label>
+                <label><input type="radio" name="event-type" value="evento"> Evento</label>
+            </div>
+            <div class="form-group">
+                <label for="performer">Adicionar Artista:</label>
+                <input type="text" id="performer" placeholder="Enter performer's name" autocorrect="off" spellcheck="false">
+            </div>
+            <div class="form-group">
+                <button onclick="saveEvent()">Salvar</button>
+                <button onclick="deleteEvent()" style="background-color: #dc3545;">Apagar</button>
+            </div>
+            <div id="eventDetails" style="margin-top: 10px;">
+                <strong>Artistas Atuais:</strong>
+                <ul id="current-performers-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const months = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+const events = {};
+let currentMonth;
+let currentDate;
+
+function generateCalendar() {
+    const grid = document.getElementById('month-grid');
+    grid.innerHTML = '';
+
+    months.forEach((month, index) => {
+        const monthDiv = document.createElement('div');
+        monthDiv.className = 'month';
+
+        const title = document.createElement('h3');
+        title.innerText = month;
+        monthDiv.appendChild(title);
+
+        const exportButton = document.createElement('button');
+        exportButton.className = 'export-button';
+        exportButton.innerText = 'Baixar Escala';
+        exportButton.onclick = () => exportMonthToPDF(index);
+        monthDiv.appendChild(exportButton);
+
+        const dayNamesDiv = document.createElement('div');
+        dayNamesDiv.className = 'day-names';
+
+        ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].forEach(day => {
+            const dayName = document.createElement('div');
+            dayName.innerText = day;
+            dayNamesDiv.appendChild(dayName);
+        });
+        monthDiv.appendChild(dayNamesDiv);
+
+        const daysDiv = document.createElement('div');
+        daysDiv.className = 'days';
+
+        const firstDay = new Date(2025, index, 1).getDay();
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'day empty-day';
+            daysDiv.appendChild(emptyDiv);
+        }
+
+        const daysInMonth = new Date(2025, index + 1, 0).getDate();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'day';
+
+            const key = index + '-' + day;
+            if (events[key]) {
+                dayDiv.classList.add(events[key].type);
+            }
+
+            /*dayElement.onclick = function() { openModal(i); };*/
+
+            dayDiv.innerText = day;
+            dayDiv.onclick = () => openDateSelector(index, day);
+            daysDiv.appendChild(dayDiv);
+        }
+        monthDiv.appendChild(daysDiv);
+        grid.appendChild(monthDiv);
+    });
+
+    generateNotesBackground();
+}
+
+function generateNotesBackground() {
+    const notesBackground = document.getElementById('notes-background');
+    const notes = ['♪', '♫', '♬', '♩', '♭', '♯'];
+    const fixedPositions = [
+        { top: '10%', left: '10%', size: '100px' },
+        { top: '20%', left: '30%', size: '150px' },
+        { top: '50%', left: '20%', size: '120px' },
+        { top: '40%', left: '70%', size: '180px' },
+        { top: '80%', left: '40%', size: '110px' },
+        { top: '60%', left: '60%', size: '140px' }
+    ];
+
+    fixedPositions.forEach(pos => {
+        const note = document.createElement('div');
+        note.className = 'note';
+        note.innerText = notes[Math.floor(Math.random() * notes.length)];
+        note.style.top = pos.top;
+        note.style.left = pos.left;
+        note.style.fontSize = pos.size;
+        notesBackground.appendChild(note);
+    });
+}
+
+let currentEventIndex = null;
+
+function openDateSelector(monthIndex, day) {
+    currentMonth = monthIndex;
+    currentDate = day;
+    const modal = document.getElementById('eventModal');
+    const title = document.getElementById('modal-title');
+    title.innerText = 'Eventos em ' + day + ' de ' + months[monthIndex];
+    modal.style.display = 'block';
+
+    const currentList = document.getElementById('current-performers-list');
+    currentList.innerHTML = '';
+    if (events[monthIndex + '-' + day]) {
+        events[monthIndex + '-' + day].performers.forEach(function(performer, index) {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = performer + ' <button onclick="editEvent(' + index + ')">Editar</button><button style="background-color: #dc3545;" onclick="deleteEvent(' + index + ')">Excluir</button>';
+            currentList.appendChild(listItem);
+        });
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('eventModal');
+    modal.style.display = 'none';
+}
+
+function saveEvent() {
+    const performerInput = document.getElementById('performer');
+    const performer = performerInput.value;
+    const eventTypeInput = document.querySelector('input[name="event-type"]:checked');
+    if (!performer || !eventTypeInput) return;
+
+    const eventType = eventTypeInput.value;
+    const eventData = {
+    data: `2025-${(currentMonth + 1).toString().padStart(2, '0')}-${currentDate.toString().padStart(2, '0')}`,
+    performer: performer,
+    tipo_evento: eventType
+};
+
+fetch('/eventos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eventData)
+})
+.then(response => response.json())
+.then(data => {
+    console.log('Resposta da API:', data);
+    if (data.error) {
+        console.error('Erro ao salvar evento:', data.error);
+    } else {
+        alert('Evento salvo com sucesso!');
+        location.reload();
+    }
+})
+.catch(error => console.error('Erro ao salvar evento:', error));
+
+}
+
+
+function deleteEvent(index) {
+    const key = currentMonth + '-' + currentDate;
+
+    if (index !== null && events[key]) {
+        events[key].performers.splice(index, 1);
+    }
+
+    if (events[key] && events[key].performers.length === 0) {
+        delete events[key];
+    }
+
+    closeModal();
+    generateCalendar();
+}
+
+function editEvent(index) {
+    const performerInput = document.getElementById('performer');
+    const currentPerformer = events[currentMonth + '-' + currentDate].performers[index];
+    performerInput.value = currentPerformer;
+    currentEventIndex = index;
+    closeModal();
+    openDateSelector(currentMonth, currentDate);
+}
+
+function exportMonthToPDF(monthIndex) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const title = 'Eventos do mês de ' + months[monthIndex];
+    doc.setFontSize(16);
+    doc.text(title, 10, 10);
+
+    const tableColumn = ["Data", "Pessoas", "Tipo de Evento"];
+    const tableRows = [];
+    const daysInMonth = new Date(2025, monthIndex + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const key = monthIndex + '-' + day;
+        if (events[key]) {
+            events[key].performers.forEach(function(performer) {
+                const eventType = events[key].type || "Sem Tipo";
+                const rowData = [day + '/' + (monthIndex + 1) + '/2025', performer, eventType];
+                tableRows.push(rowData);
+            });
+        }
+    }
+
+    if (tableRows.length === 0) {
+        doc.text("Nenhum evento registrado para este mês.", 10, 30);
+    } else {
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [41, 128, 185] },
+        });
+    }
+
+    doc.save(months[monthIndex] + '-eventos.pdf');
+}
+
+function loadEvents() {
+    fetch('/api/eventos')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Erro ao buscar eventos:', data.error);
+                return;
+            }
+
+            data.eventos.forEach(evento => {
+                console.log(evento); // Teste para ver os eventos no console
+                // Aqui você pode adicionar código para exibir os eventos na interface
+            });
+        })
+        .catch(error => console.error('Erro ao carregar eventos:', error));
+}
+
+window.onload = function() {
+    loadEvents();
+    generateCalendar();
+};
+
+
+window.onload = generateCalendar;
+
+    </script>
+</body>
+</html>
