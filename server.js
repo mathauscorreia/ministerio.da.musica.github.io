@@ -17,8 +17,7 @@ app.use(express.json());
 app.get('/', async (req, res) => {
     const { data: eventos, error } = await supabase
         .from('eventos')
-        .insert([{data,performer,tipo_evento}])
-        .select('');
+        .select('*');
 
     if (error) {
         console.error('Erro ao buscar eventos:', error);
