@@ -275,7 +275,7 @@ button {
             </div>
             <div class="form-group">
                 <button onclick="saveEvent()">Salvar</button>
-                <button onclick="deleteEvent()" style="background-color: #dc3545;">Apagar</button>
+                <!--<button onclick="deleteEvent()" style="background-color: #dc3545;">Apagar</button>-->
             </div>
             <div id="eventDetails" style="margin-top: 10px;">
                 <strong>Artistas Atuais:</strong>
@@ -393,7 +393,7 @@ button {
     if (events[key]) {
         events[key].performers.forEach(function(performer, index) {
             const listItem = document.createElement('li');
-            listItem.innerHTML = performer + ' <button onclick="editEvent(' + index + ')">Editar</button><button style="background-color: #dc3545;" onclick="deleteEvent(' + index + ')">Excluir</button>';
+            listItem.innerHTML = performer + ' <!--<button onclick="editEvent(' + index + ')">Editar</button><button style="background-color: #dc3545;" onclick="deleteEvent(' + index + ')">Excluir</button>-->';
             currentList.appendChild(listItem);
         });
     }
