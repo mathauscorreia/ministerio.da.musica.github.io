@@ -378,7 +378,7 @@ button {
         }
 
         let currentEventIndex = null;
-        function openDateSelector(monthIndex, day) {
+    function openDateSelector(monthIndex, day) {
     currentMonth = monthIndex;
     currentDate = day;
     const modal = document.getElementById('eventModal');
@@ -438,7 +438,7 @@ button {
         }
 
 
-        function deleteEvent(index) {
+        /*function deleteEvent(index) {
             const key = currentMonth + '-' + currentDate;
 
             if (index !== null && events[key]) {
@@ -451,16 +451,16 @@ button {
 
             closeModal();
             generateCalendar();
-        }
+        }*/
 
-        function editEvent(index) {
+        /*function editEvent(index) {
             const performerInput = document.getElementById('performer');
             const currentPerformer = events[currentMonth + '-' + currentDate].performers[index];
             performerInput.value = currentPerformer;
             currentEventIndex = index;
             closeModal();
             openDateSelector(currentMonth, currentDate);
-        }
+        }*/
 
         function exportMonthToPDF(monthIndex) {
             const { jsPDF } = window.jspdf;

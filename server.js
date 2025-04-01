@@ -61,7 +61,7 @@ app.post('/eventos', async (req, res) => {
 });
 
 // Rota para editar evento
-app.put('/eventos/:id', async (req, res) => {
+/*app.put('/eventos/:id', async (req, res) => {
     const { id } = req.params;
     const { data, performer, tipo_evento } = req.body;
 
@@ -76,10 +76,10 @@ app.put('/eventos/:id', async (req, res) => {
     }
 
     res.json({ evento: updatedEvent[0] });
-});
+});*/
 
 // Rota para excluir evento
-app.delete('/eventos/:id', async (req, res) => {
+/*app.delete('/eventos/:id', async (req, res) => {
     const { id } = req.params;
 
     const { error } = await supabase
@@ -93,7 +93,7 @@ app.delete('/eventos/:id', async (req, res) => {
     }
 
     res.status(200).json({ message: 'Evento excluído com sucesso' });
-});
+});*/
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Servidor rodando em http://localhost:${process.env.PORT || 3000}');
